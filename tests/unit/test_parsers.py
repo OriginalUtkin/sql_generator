@@ -7,8 +7,9 @@ from sql_to_code.utils import get_file_content
 @pytest.mark.parametrize(
     "fixture_sql_filename, parser",
     [
-        ("tests/fixtures_sql/test_schema_enum.sql", parsers.enum.parser),
+        ("tests/fixtures_sql/test_schema_enum.sql", parsers.create_enum.parser),
         ("tests/fixtures_sql/test_schema_alter.sql", parsers.alter_table.parser),
+        # ("tests/fixtures_sql/test_schema_table.sql", parsers.create_table.parser),
     ],
 )
 def test_parsers(fixture_sql_filename, parser):

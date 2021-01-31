@@ -1,27 +1,22 @@
-from sql_to_code.parsers.table_parser import table_parser
-from sql_to_code.parsers.command_parser import parse_commands
-from sql_to_code.utils import get_file_content
-from sql_to_code.parsers.table_parser import Attribute
+from sql_to_code.parsers.create_table import parser
+from sql_to_code.parsers.create_table import models
+from sql_to_code.utils import get_file_content, parse_commands
 
 
 def test_table_parser() -> None:
     attributes = [
-        Attribute("process_id", "int", True),
-        Attribute("booking_id", "int", False),
-        Attribute("ticket_id", "int", False),
-        Attribute("created_at", "timestamp", False),
-        Attribute("updated_at", "timestamp", False)
+        models.Attribute("process_id", "int", True),
+        models.Attribute("booking_id", "int", False),
+        models.Attribute("ticket_id", "int", False),
+        models.Attribute("created_at", "timestamp", False),
+        models.Attribute("updated_at", "timestamp", False),
     ]
 
-    file = get_file_content("tests/test_schema_table.sql")
-    create_table_command: str = parse_commands(file)[0]
-    command = table_parser(create_table_command)
+    sql_text = get_file_content("tests/fixtures_sql/test_schema_table.sql")
 
-    assert command.name == "process"
-    assert command.schema == attributes
+    commands = parse_commands(sql_text)
 
+    table = parser.parse(commands[0])
 
-
-
-
-
+    assert table.name == "process"
+    assert table.schema == attributes

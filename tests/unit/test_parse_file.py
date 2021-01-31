@@ -1,6 +1,4 @@
-from sql_to_code.utils import get_file_content
-
-from sql_to_code.parsers.command_parser import parse_commands
+from sql_to_code.utils import get_file_content, parse_commands
 
 
 def test_parser() -> None:

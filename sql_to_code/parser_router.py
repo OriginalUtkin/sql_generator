@@ -1,8 +1,8 @@
 from . import parsers
 
 parser_route_rules = [
-    (lambda sql_text: "CREATE TYPE" in sql_text, parsers.enum.parser),
-    (lambda sql_text: "CREATE TABLE" in sql_text, parsers.table_parser),
+    (lambda sql_text: "CREATE TYPE" in sql_text, parsers.create_enum.parser),
+    (lambda sql_text: "CREATE TABLE" in sql_text, parsers.create_table.parser),
     (lambda sql_text: "ALTER TABLE" in sql_text, parsers.alter_table.parser),
 ]
 

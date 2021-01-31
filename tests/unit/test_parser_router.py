@@ -8,9 +8,9 @@ from sql_to_code.utils import get_file_content
 @pytest.mark.parametrize(
     "test_sql, expected_parser",
     [
-        ("tests/fixtures_sql/test_schema_enum.sql", parsers.enum.parser),
+        ("tests/fixtures_sql/test_schema_enum.sql", parsers.create_enum.parser),
         ("tests/fixtures_sql/test_schema_alter.sql", parsers.alter_table.parser),
-        ("tests/fixtures_sql/test_schema_table.sql", parsers.table_parser),
+        ("tests/fixtures_sql/test_schema_table.sql", parsers.create_table.parser),
     ],
 )
 def test_parser_router(test_sql, expected_parser):

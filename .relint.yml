@@ -1,0 +1,4 @@
+- name: Fix it now
+  pattern: "[fF][iI][xX][mM][eE]"
+  filename:
+    - "*.py"

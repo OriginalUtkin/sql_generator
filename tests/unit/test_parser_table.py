@@ -1,15 +1,14 @@
-from sql_to_code.parsers.create_table import parser
-from sql_to_code.parsers.create_table import models
+from sql_to_code.parsers.create_table import models, parser
 from sql_to_code.utils import get_file_content, parse_commands
 
 
 def test_table_parser() -> None:
     attributes = [
-        models.Attribute("process_id", "int", True),
-        models.Attribute("booking_id", "int", False),
-        models.Attribute("ticket_id", "int", False),
-        models.Attribute("created_at", "timestamp", False),
-        models.Attribute("updated_at", "timestamp", False),
+        models.Attribute("process_id", "int", False, None, True, False),
+        models.Attribute("booking_id", "int", False, None, False, True),
+        models.Attribute("ticket_id", "int", False, None, False, True),
+        models.Attribute("created_at", "timestamp", False, None, False, True),
+        models.Attribute("updated_at", "timestamp", False, None, False, True),
     ]
 
     sql_text = get_file_content("tests/fixtures_sql/test_schema_table.sql")

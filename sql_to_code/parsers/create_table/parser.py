@@ -3,13 +3,12 @@ from typing import List
 
 from .models import Table, Attribute
 
-regex_table_name: str = r'CREATE TABLE "([\S\d]+)"'
-regex_table_schema: str = r'CREATE TABLE "[\S\d]+\"\s*\(\s*(.+)\s*\);'
+regex_name_schema: str = r'CREATE TABLE "([\S\d]+)"\s*\(\s*(.+)\s*\);'
 
 
 def parse(sql_text: str) -> Table:
-    table_name: str = re.findall(regex_table_name, sql_text)[0]
-    all_attributes: List[str] = re.findall(regex_table_schema, sql_text)[0].split(",")
+    table_name, schema = re.findall(regex_name_schema, sql_text)[0]
+    all_attributes: List[str] = schema.split(",")
     schema: List[str] = map(
         lambda attribute: attribute.strip().replace('"', ""), all_attributes
     )

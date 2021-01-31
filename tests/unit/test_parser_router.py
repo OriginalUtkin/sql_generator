@@ -9,8 +9,8 @@ from sql_to_code.utils import get_file_content
     "test_sql, expected_parser",
     [
         ("tests/fixtures_sql/test_schema_enum.sql", parsers.enum.parser),
+        ("tests/fixtures_sql/test_schema_alter.sql", parsers.alter_table.parser),
         ("tests/fixtures_sql/test_schema_table.sql", parsers.table_parser),
-        ("tests/fixtures_sql/test_schema_alter.sql", parsers.alter_parser),
     ],
 )
 def test_parser_router(test_sql, expected_parser):

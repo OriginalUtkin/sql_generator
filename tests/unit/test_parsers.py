@@ -1,5 +1,4 @@
 import pytest
-
 from sql_to_code import parsers
 from sql_to_code.utils import get_file_content
 

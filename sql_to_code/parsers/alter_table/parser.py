@@ -1,4 +1,5 @@
 import re
+
 from .models import AlterTableContext
 
 source_table_name_regex = re.compile('ALTER TABLE "(?P<table_name>\w+)"')
@@ -24,8 +25,5 @@ def parse(sql_text: str):
     ).groupdict()["result_table_field_name"]
 
     return AlterTableContext(
-        source_table_name,
-        foreign_key_name,
-        result_table_name,
-        result_table_field_name,
+        source_table_name, foreign_key_name, result_table_name, result_table_field_name,
     )

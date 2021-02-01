@@ -1,7 +1,5 @@
 import pytest
-
-from sql_to_code import parsers
-from sql_to_code import parser_router
+from sql_to_code import parser_router, parsers
 from sql_to_code.utils import get_file_content
 
 

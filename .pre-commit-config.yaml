@@ -35,11 +35,6 @@ repos:
     hooks:
       - id: relint
 
-  - repo: https://github.com/PyCQA/pydocstyle
-    rev: 5.1.1
-    hooks:
-      - id: pydocstyle
-
   - repo: https://github.com/ambv/black
     rev: 19.10b0
     hooks:

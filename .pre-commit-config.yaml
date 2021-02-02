@@ -9,7 +9,6 @@ repos:
         exclude: ^.*\.md$
       - id: end-of-file-fixer
       - id: debug-statements
-      - id: no-commit-to-branch
       - id: mixed-line-ending
         args: [--fix=lf]
       - id: check-merge-conflict

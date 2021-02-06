@@ -11,7 +11,7 @@ def test_table_parser() -> None:
         models.Attribute("updated_at", "timestamp", False, None, False, True),
     ]
 
-    sql_text = get_file_content("tests/fixtures_sql/test_schema_table.sql")
+    sql_text = get_file_content("tests/test_sql/test_schema_table.sql")
 
     commands = parse_commands(sql_text)
 

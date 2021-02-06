@@ -3,6 +3,6 @@ from typing import List
 
 
 @dataclass
-class EnumContext:
+class Enumeration:
     name: str
     values: List[str]

@@ -19,8 +19,8 @@ def create_context(raw_sql_commands: List[str]) -> Context:
             context.enums.append(result)
 
         if isinstance(result, AlterTable):
-            for table in context.tables:
-                if table.table.name == result.source_table_name:
-                    table.alter_tables.append(result)
+            for table_context in context.tables:
+                if table_context.table.name == result.table_name:
+                    table_context.alter_tables.append(result)
 
     return context

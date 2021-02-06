@@ -6,20 +6,20 @@ Base = declarative_base()
 {% for enum in g.enums %}
 {{ enum.name }} = ENUM(
     {% for value in enum.values %}
-        {{ value }},
+    "{{ value }}",
     {% endfor %} name="{{ enum.name }}"
 )
 {% endfor %}
 
 {% for table in g.tables %}
-class {{ table.class_name }}(Base):
-    __tablename__ = "{{ table.table_name }}"
+class {{ table.table.class_name }}(Base):
+    __tablename__ = "{{ table.table.name }}"
 
-    {% for field in table.fields %}
-        {{ field.name }} = Column({{ field.type }}{% if field.primary_key %}, primary_key=True{% endif %})
+    {% for field in table.table.schema %}
+    {{ field.name }} = Column({{ field.type }}{% if field.primary_key %}, primary_key=True{% endif %})
     {% endfor %}
 
-    {% for field in table.foreign_keys %}
-        {{ field.name }} = Column({{ field.type }}, ForeignKey("{{ field.result_table_name }}"), ondelete="CASCADE")
+    {% for field in table.alter_tables %}
+    {{ field.foreign_key_name }} = Column({{ field.type }}, ForeignKey("{{ field.result_table_name }}.{{ field.result_table_field_name }}"), ondelete="CASCADE")
     {% endfor %}
 {% endfor %}

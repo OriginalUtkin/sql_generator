@@ -1,7 +1,6 @@
-import sql_to_code
 from sql_to_code.context import create_context
 from sql_to_code.models import Context, TableContext
-from sql_to_code.parsers import AlterTable, Attribute, Enumeration, Table
+from sql_to_code.parsers import AlterTable, Attribute, Enumeration, ForeignKey, Table
 from sql_to_code.utils import get_file_content, parse_commands
 
 test_context = Context(
@@ -102,10 +101,9 @@ test_context = Context(
             ),
             alter_tables=[
                 AlterTable(
-                    source_table_name="issue",
-                    foreign_key_name="process_id",
-                    result_table_name="process",
-                    result_table_field_name="process_id",
+                    table_name="issue",
+                    field_name="process_id",
+                    refer_to=ForeignKey(table_name="process", field_name="process_id"),
                 )
             ],
         ),
@@ -165,22 +163,22 @@ test_context = Context(
             ),
             alter_tables=[
                 AlterTable(
-                    source_table_name="user_action",
-                    foreign_key_name="issue_id",
-                    result_table_name="issue",
-                    result_table_field_name="issue_id",
+                    table_name="user_action",
+                    field_name="issue_id",
+                    refer_to=ForeignKey(table_name="issue", field_name="issue_id"),
                 ),
                 AlterTable(
-                    source_table_name="user_action",
-                    foreign_key_name="process_id",
-                    result_table_name="process",
-                    result_table_field_name="process_id",
+                    table_name="user_action",
+                    field_name="process_id",
+                    refer_to=ForeignKey(table_name="process", field_name="process_id"),
                 ),
                 AlterTable(
-                    source_table_name="user_action",
-                    foreign_key_name="passenger_segment_id",
-                    result_table_name="passenger_segment",
-                    result_table_field_name="passenger_segment_id",
+                    table_name="user_action",
+                    field_name="passenger_segment_id",
+                    refer_to=ForeignKey(
+                        table_name="passenger_segment",
+                        field_name="passenger_segment_id",
+                    ),
                 ),
             ],
         ),
@@ -256,16 +254,14 @@ test_context = Context(
             ),
             alter_tables=[
                 AlterTable(
-                    source_table_name="passenger_segment",
-                    foreign_key_name="process_id",
-                    result_table_name="process",
-                    result_table_field_name="process_id",
+                    table_name="passenger_segment",
+                    field_name="process_id",
+                    refer_to=ForeignKey(table_name="process", field_name="process_id",),
                 ),
                 AlterTable(
-                    source_table_name="passenger_segment",
-                    foreign_key_name="issue_id",
-                    result_table_name="issue",
-                    result_table_field_name="issue_id",
+                    table_name="passenger_segment",
+                    field_name="issue_id",
+                    refer_to=ForeignKey(table_name="issue", field_name="issue_id",),
                 ),
             ],
         ),

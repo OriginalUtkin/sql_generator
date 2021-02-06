@@ -14,7 +14,7 @@ path = Path(__file__).parent.absolute()
 env = Environment(loader=FileSystemLoader(os.path.join(path, "templates")))
 
 
-def generate(template_name: str, context: Context):
+def generate(template_name: str, context: Context) -> str:
     template = env.get_template(template_name)
 
     models_text = template.render(g=context)

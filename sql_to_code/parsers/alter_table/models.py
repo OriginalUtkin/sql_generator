@@ -2,8 +2,13 @@ from dataclasses import dataclass
 
 
 @dataclass
+class ForeignKey:
+    table_name: str
+    field_name: str
+
+
+@dataclass
 class AlterTable:
-    source_table_name: str
-    foreign_key_name: str
-    result_table_name: str
-    result_table_field_name: str
+    table_name: str
+    field_name: str
+    refer_to: ForeignKey

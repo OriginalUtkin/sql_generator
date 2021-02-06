@@ -1,4 +1,6 @@
-import enum
+from typing import List
+
+from sql_to_code.parsers import ParserOutput, Table
 
 FIELD_TYPES = {
     "int": "Integer",
@@ -11,5 +13,8 @@ FIELD_TYPES = {
 }
 
 
-def remap(context):
-    pass
+def remap(context: List[ParserOutput]):
+    for output in context:
+        if isinstance(output, Table):
+            for field in output.schema:
+                field.type = FIELD_TYPES[field.type]

@@ -1,7 +1,15 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, ENUM
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
+
+{% for enum in g.enums %}
+{{ enum.name }} = ENUM(
+    {% for value in enum.values %}
+        {{ value }},
+    {% endfor %} name="{{ enum.name }}"
+)
+{% endfor %}
 
 {% for table in g.tables %}
 class {{ table.class_name }}(Base):

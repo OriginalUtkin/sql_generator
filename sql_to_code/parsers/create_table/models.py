@@ -18,3 +18,7 @@ class Attribute:
 class Table:
     name: str
     schema: List[Attribute]
+
+    @property
+    def class_name(self):
+        return self.name.replace("_", " ").capitalize().replace(" ", "")

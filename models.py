@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
 from typing import List
-from sql_to_code.parsers.create_table.models import Table
+
 from sql_to_code.parsers.alter_table.models import AlterTable
 from sql_to_code.parsers.create_enum.models import Enumeration
+from sql_to_code.parsers.create_table.models import Table
 
 
 @dataclass

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, ENUM
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, ENUM
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -15,11 +15,9 @@ Base = declarative_base()
 class {{ table.table.class_name }}(Base):
     __tablename__ = "{{ table.table.name }}"
 
-    {% for field in table.table.schema %}
-    {{ field.name }} = Column({{ field.type }}{% if field.primary_key %}, primary_key=True{% endif %})
+    {% for field in table.table.schema %}{{ field.name }} = Column({{ field.type }}{% if field.primary_key %}, primary_key=True{% endif %})
     {% endfor %}
 
-    {% for field in table.alter_tables %}
-    {{ field.foreign_key_name }} = Column({{ field.type }}, ForeignKey("{{ field.result_table_name }}.{{ field.result_table_field_name }}"), ondelete="CASCADE")
+    {% for field in table.alter_tables %}{{ field.foreign_key_name }} = Column("{{ field.type }}", ForeignKey("{{ field.result_table_name }}.{{ field.result_table_field_name }}"), ondelete="CASCADE")
     {% endfor %}
 {% endfor %}

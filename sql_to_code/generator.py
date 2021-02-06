@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from typing import List
 
+from black import FileMode, format_str
 from jinja2 import Environment, FileSystemLoader
 
 from .context import Context, create_context
@@ -28,6 +29,9 @@ def generate_models(input_sql: str) -> None:
 
     sqlalchemy_mapper.remap(context)
 
-    text = generate("sqlalchemy.template", context)
+    models_text = generate("sqlalchemy.template", context)
 
-    print(text)
+    formatted_models_text = format_str(models_text, mode=FileMode())
+
+    with open("_result_models.py", "w") as output:
+        output.write(formatted_models_text)

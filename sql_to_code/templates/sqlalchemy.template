@@ -1,0 +1,17 @@
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
+
+{% for table in g.tables %}
+class {{ table.class_name }}(Base):
+    __tablename__ = "{{ table.table_name }}"
+
+    {% for field in table.fields %}
+        {{ field.name }} = Column({{ field.type }}{% if field.primary_key %}, primary_key=True{% endif %})
+    {% endfor %}
+
+    {% for field in table.foreign_keys %}
+        {{ field.name }} = Column({{ field.type }}, ForeignKey("{{ field.result_table_name }}"), ondelete="CASCADE")
+    {% endfor %}
+{% endfor %}

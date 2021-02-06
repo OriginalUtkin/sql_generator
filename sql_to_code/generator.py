@@ -5,8 +5,8 @@ from typing import List
 from black import FileMode, format_str
 from jinja2 import Environment, FileSystemLoader
 
+from . import mappers
 from .context import Context, create_context
-from .mappers import sqlalchemy_mapper
 from .utils import get_file_content, parse_commands
 
 path = Path(__file__).parent.absolute()
@@ -22,16 +22,20 @@ def generate(template_name: str, context: Context) -> str:
     return models_text
 
 
-def generate_models(input_sql: str) -> None:
+GENERATOR_CONFIGS = {"sqlalchemy": (mappers.sqlalchemy_mapper, "sqlalchemy.template")}
+
+
+def generate_models(input_sql: str, generator: str, output_file: str) -> None:
     file_content: str = get_file_content(filename=input_sql)
     raw_sql_commands: List[str] = parse_commands(content=file_content)
     context: Context = create_context(raw_sql_commands)
 
-    sqlalchemy_mapper.remap(context)
+    remmaper, output_template = GENERATOR_CONFIGS[generator]
 
-    models_text = generate("sqlalchemy.template", context)
+    remmaper.remap(context)
+    models_text = generate(output_template, context)
 
     formatted_models_text = format_str(models_text, mode=FileMode())
 
-    with open("_result_models.py", "w") as output:
+    with open(output_file, "w") as output:
         output.write(formatted_models_text)

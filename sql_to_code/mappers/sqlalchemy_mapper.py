@@ -1,4 +1,4 @@
-from sql_to_code.context import Context, TableContext
+from sql_to_code.context import Context
 
 FIELD_TYPES = {
     "int": "Integer",
@@ -12,7 +12,12 @@ FIELD_TYPES = {
 }
 
 
-def remap(context: Context):
+def remap(context: Context) -> None:
+    remap_tables(context)
+    remap_alter_tables(context)
+
+
+def remap_tables(context: Context) -> None:
     for output in context.tables:
         for field in output.table.schema:
             try:
@@ -26,3 +31,9 @@ def remap(context: Context):
 
                 if not enum_found:
                     raise
+
+
+def remap_alter_tables(context: Context) -> None:
+    for output in context.tables:
+        for alter_table in output.alter_tables:
+            alter_table.attribute_type = FIELD_TYPES[alter_table.attribute_type]

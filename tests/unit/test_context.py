@@ -1,6 +1,6 @@
 from sql_to_code.context import create_context
-from sql_to_code.models import Context, TableContext
-from sql_to_code.parsers import AlterTable, Attribute, Enumeration, ForeignKey, Table
+from sql_to_code.models import Context, ForeignKeyContext, TableContext
+from sql_to_code.parsers import Attribute, Enumeration, ForeignKey, ReferenceTo, Table
 from sql_to_code.utils import get_file_content, parse_commands
 
 test_context = Context(
@@ -16,6 +16,7 @@ test_context = Context(
                         default=None,
                         primary_key=True,
                         nullable=False,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="booking_id",
@@ -24,6 +25,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="ticket_id",
@@ -32,6 +34,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="state",
@@ -40,6 +43,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="created_at",
@@ -48,6 +52,7 @@ test_context = Context(
                         default="",
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="updated_at",
@@ -56,6 +61,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                 ],
             ),
@@ -72,6 +78,7 @@ test_context = Context(
                         default=None,
                         primary_key=True,
                         nullable=False,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="process_id",
@@ -80,6 +87,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="type",
@@ -88,6 +96,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="created_at",
@@ -96,14 +105,20 @@ test_context = Context(
                         default="",
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                 ],
             ),
             alter_tables=[
-                AlterTable(
-                    table_name="issue",
-                    field_name="process_id",
-                    refer_to=ForeignKey(table_name="process", field_name="process_id"),
+                ForeignKeyContext(
+                    foreign_key=ForeignKey(
+                        table_name="issue",
+                        field_name="process_id",
+                        refer_to=ReferenceTo(
+                            table_name="process", field_name="process_id"
+                        ),
+                    ),
+                    attribute_type="int",
                 )
             ],
         ),
@@ -118,6 +133,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="type",
@@ -126,6 +142,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="issue_id",
@@ -134,6 +151,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="process_id",
@@ -142,6 +160,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="passenger_segment_id",
@@ -150,6 +169,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="created_at",
@@ -158,27 +178,39 @@ test_context = Context(
                         default="",
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                 ],
             ),
             alter_tables=[
-                AlterTable(
-                    table_name="user_action",
-                    field_name="issue_id",
-                    refer_to=ForeignKey(table_name="issue", field_name="issue_id"),
-                ),
-                AlterTable(
-                    table_name="user_action",
-                    field_name="process_id",
-                    refer_to=ForeignKey(table_name="process", field_name="process_id"),
-                ),
-                AlterTable(
-                    table_name="user_action",
-                    field_name="passenger_segment_id",
-                    refer_to=ForeignKey(
-                        table_name="passenger_segment",
-                        field_name="passenger_segment_id",
+                ForeignKeyContext(
+                    foreign_key=ForeignKey(
+                        table_name="user_action",
+                        field_name="issue_id",
+                        refer_to=ReferenceTo(table_name="issue", field_name="issue_id"),
                     ),
+                    attribute_type="int",
+                ),
+                ForeignKeyContext(
+                    foreign_key=ForeignKey(
+                        table_name="user_action",
+                        field_name="process_id",
+                        refer_to=ReferenceTo(
+                            table_name="process", field_name="process_id"
+                        ),
+                    ),
+                    attribute_type="int",
+                ),
+                ForeignKeyContext(
+                    foreign_key=ForeignKey(
+                        table_name="user_action",
+                        field_name="passenger_segment_id",
+                        refer_to=ReferenceTo(
+                            table_name="passenger_segment",
+                            field_name="passenger_segment_id",
+                        ),
+                    ),
+                    attribute_type="int",
                 ),
             ],
         ),
@@ -193,6 +225,7 @@ test_context = Context(
                         default=None,
                         primary_key=True,
                         nullable=False,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="process_id",
@@ -201,6 +234,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="passenger_id",
@@ -209,6 +243,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="segment_id",
@@ -217,6 +252,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="state",
@@ -225,6 +261,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="issue_id",
@@ -233,6 +270,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="updated_at",
@@ -241,6 +279,7 @@ test_context = Context(
                         default=None,
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                     Attribute(
                         name="created_at",
@@ -249,19 +288,28 @@ test_context = Context(
                         default="",
                         primary_key=False,
                         nullable=True,
+                        foreign_key=None,
                     ),
                 ],
             ),
             alter_tables=[
-                AlterTable(
-                    table_name="passenger_segment",
-                    field_name="process_id",
-                    refer_to=ForeignKey(table_name="process", field_name="process_id",),
+                ForeignKeyContext(
+                    foreign_key=ForeignKey(
+                        table_name="passenger_segment",
+                        field_name="process_id",
+                        refer_to=ReferenceTo(
+                            table_name="process", field_name="process_id"
+                        ),
+                    ),
+                    attribute_type="int",
                 ),
-                AlterTable(
-                    table_name="passenger_segment",
-                    field_name="issue_id",
-                    refer_to=ForeignKey(table_name="issue", field_name="issue_id",),
+                ForeignKeyContext(
+                    foreign_key=ForeignKey(
+                        table_name="passenger_segment",
+                        field_name="issue_id",
+                        refer_to=ReferenceTo(table_name="issue", field_name="issue_id"),
+                    ),
+                    attribute_type="int",
                 ),
             ],
         ),

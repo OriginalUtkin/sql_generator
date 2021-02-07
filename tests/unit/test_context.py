@@ -291,7 +291,7 @@ test_context = Context(
 )
 
 
-def test_create_context():
+def test_create_context() -> None:
     sql_file = get_file_content("tests/test_sql/test_schema.sql")
     sql_commands = parse_commands(sql_file)
 

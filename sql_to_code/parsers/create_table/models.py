@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Union
 
-from ..alter_table.models import ForeignKey
+from ..alter_table.models import Reference
 
 default_type = Union[int, str, type(None)]
 
@@ -14,7 +14,7 @@ class Attribute:
     default: default_type
     primary_key: bool
     nullable: bool
-    foreign_key: ForeignKey = field(default=None)
+    foreign_key: Reference = field(default=None)
 
 
 @dataclass

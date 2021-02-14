@@ -1,11 +1,11 @@
 import pytest
 from sql_to_code import parsers
 from sql_to_code.parsers import (
-    AlterTable,
     Attribute,
     Enumeration,
     ForeignKey,
     ParserOutput,
+    Reference,
     create_table,
 )
 from sql_to_code.utils import get_file_content, parse_commands
@@ -27,10 +27,9 @@ sql_test_files_root = "tests/test_sql"
         (
             f"{sql_test_files_root}/test_schema_alter.sql",
             parsers.alter_table.parser,
-            AlterTable(
-                table_name="issue",
-                field_name="process_id",
-                refer_to=ForeignKey(table_name="process", field_name="process_id"),
+            ForeignKey(
+                refer_from=Reference(table_name="issue", field_name="process_id"),
+                refer_to=Reference(table_name="process", field_name="process_id"),
             ),
         ),
     ],

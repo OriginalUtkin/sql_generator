@@ -1,4 +1,4 @@
-from sql_to_code.context import Context, TableContext
+from sql_to_code.context import Context
 
 FIELD_TYPES = {
     "int": "Integer",
@@ -13,8 +13,8 @@ FIELD_TYPES = {
 
 
 def remap(context: Context):
-    for output in context.tables:
-        for field in output.table.schema:
+    for table in context.tables:
+        for field in table.schema:
             try:
                 field.type = FIELD_TYPES[field.type]
             except KeyError:

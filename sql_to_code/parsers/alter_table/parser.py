@@ -1,6 +1,6 @@
 import re
 
-from .models import AlterTable, ForeignKey
+from .models import ForeignKey, Reference
 
 source_table_name_regex = re.compile('ALTER TABLE "(?P<table_name>\w+)"')
 foreign_key_name_regex = re.compile('ADD FOREIGN KEY \("(?P<foreign_key>\w+)"\)')
@@ -24,10 +24,9 @@ def parse(sql_text: str):
         sql_text
     ).groupdict()["result_table_field_name"]
 
-    return AlterTable(
-        source_table_name,
-        foreign_key_name,
-        refer_to=ForeignKey(
+    return ForeignKey(
+        refer_from=Reference(table_name=source_table_name, field_name=foreign_key_name),
+        refer_to=Reference(
             table_name=result_table_name, field_name=result_table_field_name
         ),
     )

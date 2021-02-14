@@ -23,6 +23,7 @@ def remap(context: Context):
                 for enum in context.enums:
                     if enum.name == field.type:
                         enum_found = True
+                        field.type = f"Enum({enum.class_name})"
 
                 if not enum_found:
                     raise

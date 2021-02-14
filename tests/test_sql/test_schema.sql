@@ -42,6 +42,7 @@ CREATE TABLE "issue" (
 );
 
 CREATE TABLE "user_action" (
+  "id" int PRIMARY KEY,
   "email" varchar,
   "type" user_action_type,
   "issue_id" int,

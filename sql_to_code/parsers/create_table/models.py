@@ -24,4 +24,4 @@ class Table:
 
     @property
     def class_name(self):
-        return self.name.replace("_", " ").capitalize().replace(" ", "")
+        return self.name.replace("_", " ").title().replace(" ", "")

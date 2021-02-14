@@ -1,20 +1,21 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, ENUM
+import enum
+
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
 {% for enum in g.enums %}
-{{ enum.name }} = ENUM(
+class {{ enum.class_name }}(enum.Enum):
     {% for value in enum.values %}
-    "{{ value }}",
-    {% endfor %} name="{{ enum.name }}"
-)
+    {{ value }} = {{loop.index}}
+    {% endfor %}
 {% endfor %}
 
 {% for table in g.tables %}
 class {{ table.class_name }}(Base):
     __tablename__ = "{{ table.name }}"
 
-    {% for field in table.schema %}{{ field.name }} = Column({{ field.type }}{% if field.primary_key %}, primary_key=True{% endif %}{% if field.foreign_key %}, ForeignKey("{{ field.foreign_key.table_name }}.{{ field.foreign_key.field_name }}"), ondelete="CASCADE"{% endif %})
+    {% for field in table.schema %}{{ field.name }} = Column({{ field.type }}{% if field.primary_key %}, primary_key=True{% endif %}{% if field.foreign_key %}, ForeignKey("{{ field.foreign_key.table_name }}.{{ field.foreign_key.field_name }}", ondelete="CASCADE"){% endif %})
     {% endfor %}
 {% endfor %}

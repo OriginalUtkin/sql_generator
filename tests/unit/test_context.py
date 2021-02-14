@@ -15,6 +15,7 @@ test_context = Context(
                     default=None,
                     primary_key=True,
                     nullable=False,
+                    foreign_key=None,
                 ),
                 Attribute(
                     name="booking_id",
@@ -23,6 +24,7 @@ test_context = Context(
                     default=None,
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
                 Attribute(
                     name="ticket_id",
@@ -31,6 +33,7 @@ test_context = Context(
                     default=None,
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
                 Attribute(
                     name="state",
@@ -39,6 +42,7 @@ test_context = Context(
                     default=None,
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
                 Attribute(
                     name="created_at",
@@ -47,6 +51,7 @@ test_context = Context(
                     default="",
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
                 Attribute(
                     name="updated_at",
@@ -55,6 +60,7 @@ test_context = Context(
                     default=None,
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
             ],
         ),
@@ -68,6 +74,7 @@ test_context = Context(
                     default=None,
                     primary_key=True,
                     nullable=False,
+                    foreign_key=None,
                 ),
                 Attribute(
                     name="process_id",
@@ -87,6 +94,7 @@ test_context = Context(
                     default=None,
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
                 Attribute(
                     name="created_at",
@@ -95,6 +103,7 @@ test_context = Context(
                     default="",
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
             ],
         ),
@@ -102,12 +111,22 @@ test_context = Context(
             name="user_action",
             schema=[
                 Attribute(
+                    name="id",
+                    type="int",
+                    is_default=False,
+                    default=None,
+                    primary_key=True,
+                    nullable=False,
+                    foreign_key=None,
+                ),
+                Attribute(
                     name="email",
                     type="varchar",
                     is_default=False,
                     default=None,
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
                 Attribute(
                     name="type",
@@ -116,6 +135,7 @@ test_context = Context(
                     default=None,
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
                 Attribute(
                     name="issue_id",
@@ -156,6 +176,7 @@ test_context = Context(
                     default="",
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
             ],
         ),
@@ -169,6 +190,7 @@ test_context = Context(
                     default=None,
                     primary_key=True,
                     nullable=False,
+                    foreign_key=None,
                 ),
                 Attribute(
                     name="process_id",
@@ -178,7 +200,7 @@ test_context = Context(
                     primary_key=False,
                     nullable=True,
                     foreign_key=Reference(
-                        table_name="process", field_name="process_id",
+                        table_name="process", field_name="process_id"
                     ),
                 ),
                 Attribute(
@@ -188,6 +210,7 @@ test_context = Context(
                     default=None,
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
                 Attribute(
                     name="segment_id",
@@ -196,6 +219,7 @@ test_context = Context(
                     default=None,
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
                 Attribute(
                     name="state",
@@ -204,6 +228,7 @@ test_context = Context(
                     default=None,
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
                 Attribute(
                     name="issue_id",
@@ -212,7 +237,7 @@ test_context = Context(
                     default=None,
                     primary_key=False,
                     nullable=True,
-                    foreign_key=Reference(table_name="issue", field_name="issue_id",),
+                    foreign_key=Reference(table_name="issue", field_name="issue_id"),
                 ),
                 Attribute(
                     name="updated_at",
@@ -221,6 +246,7 @@ test_context = Context(
                     default=None,
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
                 Attribute(
                     name="created_at",
@@ -229,6 +255,7 @@ test_context = Context(
                     default="",
                     primary_key=False,
                     nullable=True,
+                    foreign_key=None,
                 ),
             ],
         ),

@@ -68,7 +68,7 @@ sql_test_files_root = "tests/test_sql"
                     Attribute(
                         name="created_at",
                         type="timestamp",
-                        default=None,
+                        default="(now())",
                         is_unique=False,
                         is_nullable=True,
                         is_primary_key=False,

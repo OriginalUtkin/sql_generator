@@ -1,5 +1,3 @@
-import re
-
 from pyparsing import *
 
 from .models import Enumeration

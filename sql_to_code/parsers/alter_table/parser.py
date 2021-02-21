@@ -1,9 +1,8 @@
 import re
 
-from .models import ForeignKey, Reference
-
 from pyparsing import *
 
+from .models import ForeignKey, Reference
 
 table_name_schema = CaselessKeyword("alter table") + QuotedString('"')("table_name")
 foreign_key_schema = CaselessKeyword("add foreign key") + QuotedString(

@@ -1,12 +1,12 @@
 import pytest
 from sql_to_code import parsers
 from sql_to_code.parsers import (
-    Table,
     Attribute,
     Enumeration,
     ForeignKey,
     ParserOutput,
     Reference,
+    Table,
 )
 from sql_to_code.utils import get_file_content
 

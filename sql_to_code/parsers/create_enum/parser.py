@@ -1,13 +1,20 @@
 import re
 
+from pyparsing import *
+
 from .models import Enumeration
 
-NAME_REGEX = re.compile('CREATE TYPE "(?P<name>\w+)"')
-VALUE_REGEX = re.compile("'(\w+)'")
+enum_schema = (
+    CaselessKeyword("create type")
+    + QuotedString('"')("enum_name")
+    + CaselessKeyword("as enum")
+    + CaselessKeyword("(")
+    + Group(OneOrMore(QuotedString("'") + Optional(Suppress(","))))("enum_values")
+    + CaselessKeyword(");")
+)
 
 
 def parse(sql_text: str):
-    name = NAME_REGEX.search(sql_text).groupdict()["name"]
-    values = VALUE_REGEX.findall(sql_text)
+    result = enum_schema.parseString(sql_text)
 
-    return Enumeration(name, values)
+    return Enumeration(result.enum_name, result.enum_values.asList())

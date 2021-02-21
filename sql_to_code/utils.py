@@ -11,7 +11,6 @@ def get_file_content(filename: str):
 
 
 def parse_commands(content: str) -> List[str]:
-    raw_commands = content.split("\n\n")
-    commands = [command.replace("\n", "") for command in raw_commands]
+    commands = content.split("\n\n")
 
     return commands

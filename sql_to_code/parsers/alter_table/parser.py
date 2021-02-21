@@ -2,31 +2,35 @@ import re
 
 from .models import ForeignKey, Reference
 
-source_table_name_regex = re.compile('ALTER TABLE "(?P<table_name>\w+)"')
-foreign_key_name_regex = re.compile('ADD FOREIGN KEY \("(?P<foreign_key>\w+)"\)')
-result_table_name_regex = re.compile('REFERENCES "(?P<result_table_name>\w+)"')
-result_table_field_name_regex = re.compile(
-    'REFERENCES "\w+" \("(?P<result_table_field_name>\w+)"\);'
+from pyparsing import *
+
+
+table_name_schema = CaselessKeyword("alter table") + QuotedString('"')("table_name")
+foreign_key_schema = CaselessKeyword("add foreign key") + QuotedString(
+    '("', endQuoteChar='")'
+)("foreign_key")
+reference_table = CaselessKeyword("references") + QuotedString('"')("reference_table")
+reference_table_column_name = QuotedString('("', endQuoteChar='")')(
+    "reference_table_column_name"
+)
+
+add_foreign_key_schema = (
+    table_name_schema
+    + foreign_key_schema
+    + reference_table
+    + reference_table_column_name
 )
 
 
 def parse(sql_text: str):
-    source_table_name = source_table_name_regex.search(sql_text).groupdict()[
-        "table_name"
-    ]
-    foreign_key_name = foreign_key_name_regex.search(sql_text).groupdict()[
-        "foreign_key"
-    ]
-    result_table_name = result_table_name_regex.search(sql_text).groupdict()[
-        "result_table_name"
-    ]
-    result_table_field_name = result_table_field_name_regex.search(
-        sql_text
-    ).groupdict()["result_table_field_name"]
+    result = add_foreign_key_schema.parseString(sql_text)
 
     return ForeignKey(
-        refer_from=Reference(table_name=source_table_name, field_name=foreign_key_name),
+        refer_from=Reference(
+            table_name=result.table_name, field_name=result.foreign_key
+        ),
         refer_to=Reference(
-            table_name=result_table_name, field_name=result_table_field_name
+            table_name=result.reference_table,
+            field_name=result.reference_table_column_name,
         ),
     )

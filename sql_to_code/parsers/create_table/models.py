@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import List, Optional, Union
 
 from ..alter_table.models import Reference
 
@@ -14,7 +14,7 @@ class Attribute:
     is_unique: bool
     is_nullable: bool
     is_primary_key: bool
-    foreign_key: Reference = field(default=None)
+    foreign_key: Optional[Reference] = field(default=None)
 
     @property
     def has_default(self):

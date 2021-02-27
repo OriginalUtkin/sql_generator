@@ -1,4 +1,4 @@
-from pyparsing import *
+from pyparsing import CaselessKeyword, QuotedString, delimitedList
 
 from .models import Enumeration
 
@@ -7,7 +7,7 @@ enum_schema = (
     + QuotedString('"')("enum_name")
     + CaselessKeyword("as enum")
     + CaselessKeyword("(")
-    + Group(OneOrMore(QuotedString("'") + Optional(Suppress(","))))("enum_values")
+    + delimitedList(QuotedString("'"))("enum_values")
     + CaselessKeyword(");")
 )
 
@@ -15,4 +15,4 @@ enum_schema = (
 def parse(sql_text: str):
     result = enum_schema.parseString(sql_text)
 
-    return Enumeration(result.enum_name, result.enum_values.asList())
+    return Enumeration(result.enum_name, list(result.enum_values))

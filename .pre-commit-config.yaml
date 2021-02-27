@@ -3,8 +3,8 @@ default_language_version:
 
 exclude: |
   (?x)^(
-      sql_to_code/parsers/generated/PlSqlParser.py|
-      sql_to_code/parsers/generated/PlSqlLexer.py
+      sql_to_code/parsers/generated/PLpgSQLLexer.py|
+      sql_to_code/parsers/generated/PLpgSQLParser.py
   )$
 
 repos:

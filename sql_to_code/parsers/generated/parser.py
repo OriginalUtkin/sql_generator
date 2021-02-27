@@ -1,56 +1,51 @@
 from antlr4 import CommonTokenStream, InputStream, LexerATNSimulator, ParseTreeWalker
 
-from .PlSqlLexer import PlSqlLexer
-from .PlSqlParser import PlSqlParser
 from ...models import Context
-
-# # from .SQLLexer import SQLLexer, LexerATNSimulator
-# # from .SQLParserListener import SQLParserListener
-# # from .SQLParser import SQLParser
-# from .PostgreSqlLexer import PostgreSqlLexer
+from .PLpgSQLLexer import PLpgSQLLexer
+from .PLpgSQLParser import PLpgSQLParser
+from .PLpgSQLParserListener import PLpgSQLParserListener
 
 
-# class Listener(SQLParserListener):
-#     def __init__(self, context: Context):
-#         self.__context = context
-#
-#     def enterCreate_table(self, ctx: SQLParser.create_table_statement):
-#         print("\n\n=====\nenterCreate_table")
-#
-#     def exitCreate_table(self, ctx: SQLParser.create_table_statement):
-#         # print("create table", ctx.tableview_name().getText())
-#         # for child in ctx.relational_table().children:
-#         # from IPython import embed
-#         # embed()
-#         pass
-#         # if not isinstance(child, PostgreSQLParser.Relational_propertyContext):
-#         #     continue
-#         # if child.column_definition() is None:
-#         #     print("column_definition is None!")
-#         #     continue
-#         # print("name", child.column_definition().column_name().getText())
-#         # # if child.column_definition().datatype() is None:
-#         # #     from IPython import embed
-#         # #     embed()
-#         # print("datatype", child.column_definition().datatype().getText())
+class Listener(PLpgSQLParserListener):
+    def __init__(self, context: Context):
+        self.__context = context
 
+    def enterCreate_table_statement(self, ctx: PLpgSQLParser.create_table_statement):
+        print("\n\n=====\nenterCreate_table")
+
+    def exitCreate_table_statement(self, ctx: PLpgSQLParser.create_table_statement):
+        print("\n\n=====\nexitCreate_table_statement")
+        print("create table", ctx.name.getText())
+        for item in ctx.define_table().define_columns().children:
+            if not isinstance(item, PLpgSQLParser.Table_column_defContext):
+                continue
+            print("name", item.table_column_definition().identifier().getText())
+            print("datatype", item.table_column_definition().data_type().getText())
+            try:
+                print(
+                    "default>",
+                    item.table_column_definition()
+                    .constraint_common()[0]
+                    .constr_body()
+                    .default_expr.getText(),
+                )
+            except Exception as e:
+                pass
+        # TODO fill self.__context
 
 
 def parse_commands(content: str) -> Context:
-    # from IPython import embed
-    # embed()
-
     LexerATNSimulator.debug = False
 
     result = Context()
-    lexer = PlSqlLexer(InputStream(content.upper()))
+    lexer = PLpgSQLLexer(InputStream(content))
     stream = CommonTokenStream(lexer)
 
-    parser = PlSqlParser(stream)
-    tree = parser.sql_script()
+    parser = PLpgSQLParser(stream)
+    tree = parser.sql()
 
-    # listener = Listener(context=result)
-    # walker = ParseTreeWalker()
-    # walker.walk(listener, tree)
+    listener = Listener(context=result)
+    walker = ParseTreeWalker()
+    walker.walk(listener, tree)
 
     return result

@@ -50,7 +50,7 @@ sql_test_files_root = "tests/test_sql"
                     Attribute(
                         name="booking_id",
                         type="int",
-                        default="10",
+                        default=10,
                         is_unique=False,
                         is_nullable=True,
                         is_primary_key=False,

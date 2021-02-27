@@ -1,4 +1,4 @@
-from pyparsing import *
+from pyparsing import CaselessKeyword, QuotedString
 
 from .models import ForeignKey, Reference
 

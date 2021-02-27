@@ -1,46 +1,77 @@
-import re
-from typing import List
+from pyparsing import (
+    CaselessKeyword,
+    Group,
+    Literal,
+    MatchFirst,
+    OneOrMore,
+    Optional,
+    QuotedString,
+    Suppress,
+    Word,
+    alphanums,
+    alphas,
+)
+from pyparsing import pyparsing_common as ppc
+from pyparsing import quotedString
 
-from .models import Attribute, Table, default_type
+from .models import Attribute, Table
 
-regex_name_schema: str = r'CREATE TABLE "([\S\d]+)"\s*\(\s*(.+)\s*\);'
-name_and_type_regex = r"(^[\S\d]+)\s([\S]+)\s*"
-default_regex = r"DEFAULT\s+(.?)+\s*"
+# table schema
+create_table = CaselessKeyword("create table")
+table_name = MatchFirst(QuotedString('"'))("table_name")
+
+# field schema
+column_name = QuotedString('"')("column_name")
+
+# column type:
+# "(" ")" - because of varchar(40)
+# "_" - because of enums like process_type
+column_type = Word(alphas, alphanums + "(" + ")" + "_")("column_type")
+is_primary_key = CaselessKeyword("primary key")
+is_unique = CaselessKeyword("unique")("is_unique")
+
+date_time_now = Word("now()")
+default_value = quotedString | ppc.real | ppc.signed_integer | date_time_now
+has_default = CaselessKeyword("default") + default_value("default_value")
+
+is_not_null = CaselessKeyword("not null")("is_not_null")
+
+
+table_columns = OneOrMore(
+    Group(
+        column_name
+        + column_type
+        + (
+            Optional(is_not_null)
+            & Optional(has_default)
+            & Optional(is_unique)
+            & Optional(is_primary_key)
+        )
+        + Optional(Suppress(","))
+    )
+)("table_columns")
+
+create_table_schema = (
+    create_table + table_name + Literal("(") + table_columns + Literal(");")
+)
 
 
 def parse(sql_text: str) -> Table:
-    table_name, schema = re.findall(regex_name_schema, sql_text)[0]
-    all_attributes: List[str] = schema.split(",")
-    schema: List[str] = map(
-        lambda attribute: attribute.strip().replace('"', ""), all_attributes
-    )
-    attributes = parse_attributes(schema)
+    result = create_table_schema.parseString(sql_text)
 
-    return Table(table_name, attributes)
-
-
-def parse_attributes(schema) -> List[Attribute]:
-    attributes = list()
-
-    for attribute in schema:
-        name, a_type = re.findall(pattern=name_and_type_regex, string=attribute)[0]
-
-        is_pk = "PRIMARY KEY" in attribute.upper()
-        is_default = not is_pk and "DEFAULT" in attribute.upper()
-
-        attributes.append(
+    table = Table(
+        result.table_name,
+        [
             Attribute(
-                name=name,
-                type=a_type,
-                primary_key=is_pk,
-                nullable="NOT NULL" not in attribute.upper() and not is_pk,
-                is_default=is_default,
-                default=parse_default(attribute) if is_default else None,
+                name=column.column_name,
+                type=column.column_type,
+                default=column.default_value if column.default_value else None,
+                is_unique=bool(column.is_unique),
+                is_nullable=not bool(column.is_not_null),
+                is_primary_key=bool(column.is_primary_key),
             )
-        )
+            for column in result.table_columns
+        ],
+    )
 
-    return attributes
-
-
-def parse_default(sql_command: str) -> default_type:
-    return re.findall(default_regex, sql_command)[0]
+    return table

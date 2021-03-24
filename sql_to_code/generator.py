@@ -27,8 +27,10 @@ GENERATOR_CONFIGS = {"sqlalchemy": (mappers.sqlalchemy_mapper, "sqlalchemy.templ
 
 def generate_models(input_sql: str, generator: str, output_file: str) -> None:
     file_content: str = get_file_content(filename=input_sql)
-    raw_sql_commands: List[str] = parse_commands(content=file_content)
+    # raw_sql_commands: List[str] = parse_commands(content=file_content)
     context: Context = create_context(raw_sql_commands)
+
+    context: Context = parse_commands(content=file_content)
 
     remmaper, output_template = GENERATOR_CONFIGS[generator]
 

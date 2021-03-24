@@ -1,6 +1,12 @@
 default_language_version:
   python: python3.7
 
+exclude: |
+  (?x)^(
+      sql_to_code/parsers/generated/PLpgSQLLexer.py|
+      sql_to_code/parsers/generated/PLpgSQLParser.py
+  )$
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.4.0
